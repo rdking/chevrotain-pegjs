@@ -1,0 +1,30 @@
+{
+  "name": "chevrotain-pegjs",
+  "version": "1.0.0",
+  "description": "A Chevrotain Lexer/Parser to convert PEGjs-formatted grammar into a Chevrotain Lexer/Parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rdking/chevrotain-pegjs.git"
+  },
+  "keywords": [
+    "chevrotain",
+    "pegjs",
+    "parser",
+    "lexer",
+    "language",
+    "syntax"
+  ],
+  "author": "Ranando D. King",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/rdking/chevrotain-pegjs/issues"
+  },
+  "homepage": "https://github.com/rdking/chevrotain-pegjs#readme",
+  "dependencies": {
+    "chevrotain": "^4.2.0"
+  }
+}
