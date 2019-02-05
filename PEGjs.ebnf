@@ -1,27 +1,56 @@
 grammar = rule, newline;
-rule = lhs, [ ws ], "=", rhs, ";";
+rule = lhs, [ ws ], assign, rhs, terminator;
 lhs = identifier;
 rhs = { [ ws ], alternation, [ ws ] };
-alternation = [ [ ws ], expression, [ ws ], { "/", [ ws ], expression, [ ws ] } ];
-expression = [ prefix ], element, [ suffix ];
-element = group | terminal | identifier;
-group = "(", [ ws ], rhs, [ ws ], ")";
+alternation = [ [ ws ], expression, [ ws ], { alternate, [ ws ], expression, [ ws ] } ];
+expression = conditional, [ repetition ];
+conditional = test | default;
+test = ampersand, tail;
+default = bat, tail;
+tail = predicate | element;
+repetition = element, repType;
+repType = many | atLeastOne | optional;
+many = "*";
+atLeastOne = "+";
+optional = "?";
+element = expected, predicate;
+expected = group | terminal | identifier;
+predicate = block;
+block = open_block, script, close_block;
+script = terminal | block | script_char;
+script_char = open_set | close_set | open_group | close_group | terminator 
+            | assign | symbol | newline | ws | identifier_character;
+group = open_group, [ ws ], rhs, [ ws ], close_group;
 terminal = dq_string | sq_string;
-dq_string = '"', dq_string_char, '"';
-sq_string = "'", sq_string_char, "'";
-dq_string_char = "'" | character;
-sq_string_char = '"' | character;
+dq_string = double_quote, dq_string_char, double_quote;
+sq_string = single_quote, sq_string_char, single_quote;
+dq_string_char = single_quote | character;
+sq_string_char = double_quote | character;
 identifier = letter, { identifier_character };
-identifier_character = "_" | letter | digit;
+identifier_character = underscore | letter | digit;
 letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L"
        | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X"
        | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
        | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v"
        | "w" | "x" | "y" | "z";
 digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
-character = "[" | "]" | "{" | "}" | "(" | ")" | "|" | "," | "=" | ";"
-          | symbol | newline | ws | identifier_character;
-symbol = "~" | "`" | "!" | "@" | "#" | "$" | "%" | "^" | "&" | "*" | "-" | "+"
-       | "\" | ":" | "<" | ">" | "?" | "." | "/";
+open_set = "[";
+close_set = "]";
+open_group = "(";
+close_group = ")";
+open_block = "{";
+close_block = "}";
+assign = "='";
+alternate = "/";
+terminator = ";";
+ampersand = "&";
+bat = "!";
+single_quote = "'";
+double_quote = '"';
+underscore = "_";
+character = open_block | close_block | script_char;
+symbol = bat | ampersand | alternate | many | atLeastOne | optional | "~" | "`"
+       | "@" | "#" | "$" | "%" | "^" | "-" | "\" | ":" | "<" | ">" | "." | "|"
+       | ",";
 newline = { [ "\r" ], "n" };
 ws = { "\t" | " " };
